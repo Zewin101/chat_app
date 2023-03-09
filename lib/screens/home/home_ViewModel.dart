@@ -7,8 +7,8 @@ import '../../models/room.dart';
 
 class HomeViewModel extends BaseViewModel<HomeNavigator>{
   List<Room> rooms=[];
-void readRooms(){
- DatabaseUtils.readRoomsFromFirestore().then((value) {
+ readRooms()async{
+ return await DatabaseUtils.readRoomsFromFirestore().then((value) {
    rooms=value;
  }).catchError((onError){
    navigator!.showLoading(message: onError.toString());

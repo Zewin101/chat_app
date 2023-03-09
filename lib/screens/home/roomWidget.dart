@@ -34,7 +34,8 @@ class RoomWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                   child: Image.asset(
                     "assets/images/${room.categoryId}.png",
-                    width: double.infinity,
+
+
                   )),
             ),
             Text(

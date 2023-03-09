@@ -24,9 +24,8 @@ class Chat_view extends StatefulWidget {
 
 class _Chat_viewState extends BaseView<Chat_view, Chat_ViewModel>
     implements Chat_Naviagator {
-  var messageController=TextEditingController();
-  var formKey=GlobalKey<FormState>();
-
+  var messageController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -38,9 +37,9 @@ class _Chat_viewState extends BaseView<Chat_view, Chat_ViewModel>
   @override
   Widget build(BuildContext context) {
     var room = ModalRoute.of(context)?.settings.arguments as Room;
-    viewModel.room=room;
-    var provider=Provider.of<MyProvider>(context);
-viewModel.myUser=provider.myUser!;
+    viewModel.room = room;
+    var provider = Provider.of<MyProvider>(context);
+    viewModel.myUser = provider.myUser!;
     return ChangeNotifierProvider(
       create: (context) => viewModel,
       child: Stack(children: [
@@ -83,22 +82,28 @@ viewModel.myUser=provider.myUser!;
                 ]),
             child: Column(
               children: [
-                Expanded(child: StreamBuilder<QuerySnapshot<Message>>(
+                Expanded(
+                    child: StreamBuilder<QuerySnapshot<Message>>(
                   stream: viewModel.getMessage(),
                   builder: (context, snapshot) {
-                    if(snapshot.connectionState==ConnectionState.waiting){
-                      return const Center(child: CircularProgressIndicator(color: CHATCOLOR,));
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                          child: CircularProgressIndicator(
+                        color: CHATCOLOR,
+                      ));
                     }
-                    if(snapshot.hasError){
-                      return Center(child: const Text('some thing went wrong '));
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: const Text('some thing went wrong '));
                     }
-                    var messages=snapshot.data?.docs.map((e) => e.data()).toList()??[];
+                    var messages =
+                        snapshot.data?.docs.map((e) => e.data()).toList() ?? [];
                     return ListView.builder(
-                      itemCount: messages.length,
-                      itemBuilder: (context, index) => MessageWidget(messages[index]));
+                        itemCount: messages.length,
+                        itemBuilder: (context, index) =>
+                            MessageWidget(messages[index]));
                   },
                 )),
-
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -108,10 +113,9 @@ viewModel.myUser=provider.myUser!;
                           height: MediaQuery.of(context).size.height * .06,
                           child: TextFormField(
                             validator: (value) {
-                              if(value!.isEmpty||value.trim()==''){
-return"ddd";
-                              }
-                              else {
+                              if (value!.isEmpty || value.trim() == '') {
+                                return "ddd";
+                              } else {
                                 return null;
                               }
                             },
@@ -121,13 +125,12 @@ return"ddd";
                             decoration: const InputDecoration(
                               hintText: " Type message",
                               border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.only(topRight: Radius.circular(15))),
-                              enabledBorder:  OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.only(topRight: Radius.circular(15),
-                            bottomLeft: Radius.circular(15)
-                            )),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15))),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15))),
                             ),
                           ),
                         ),
@@ -141,35 +144,38 @@ return"ddd";
                             height: MediaQuery.of(context).size.height * .06,
                             child: ElevatedButton(
                                 onPressed: () {
-                                  viewModel.sendMessage(messageController.text,);
-
+                                  viewModel.sendMessage(
+                                    messageController.text,
+                                  );
                                 },
                                 style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(CHATCOLOR),
-                                    foregroundColor: MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                    shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                        const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(topLeft:Radius.circular(15) ,
-                                      bottomRight: Radius.circular(15)
-                                      ),
-                                      side: BorderSide(color: CHATCOLOR)
-                                    ),
-                                    ),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          CHATCOLOR),
+                                  foregroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.white),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15)),
+                                        side: BorderSide(color: CHATCOLOR)),
+                                  ),
                                 ),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                 Text(
+                                    Text(
                                       "Send",
-                                      style: Theme.of(context).textTheme.headline1,
+                                      style:
+                                          Theme.of(context).textTheme.headline1,
                                     ),
                                     const SizedBox(
                                       width: 6,
                                     ),
-
                                     Icon(Icons.send),
                                   ],
                                 )),
@@ -211,16 +217,16 @@ return"ddd";
   }
 
   void sendMessageValid() {
-    if(formKey.currentState!.validate()){
-      viewModel.sendMessage(messageController.text,);
+    if (formKey.currentState!.validate()) {
+      viewModel.sendMessage(
+        messageController.text,
+      );
     }
   }
 
   @override
   void uploadMessageToFirestore() {
     messageController.clear();
-    setState(() {
-
-    });
+    setState(() {});
   }
 }
